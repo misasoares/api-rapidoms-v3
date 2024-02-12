@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  uid      String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  admin    Boolean? @default(false)
+  document String?  @unique
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  Order     Order[]
+
+  @@map("users")
+}
+
+model CarBrand {
+  uid String @id @default(uuid())
+
+  name String @unique
+
+  carsModels CarModel[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("car_brands")
+}
+
+model CarModel {
+  uid String @id @default(uuid())
+
+  name String
+
+  description String
+
+  carBrand    CarBrand @relation(fields: [carBrandUid], references: [uid])
+  carBrandUid String
+
+  products Product[]
+  Order    Order[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("car_models")
+}
+
+model Product {
+  uid String @id @default(uuid())
+
+  name String
+
+  carsModels CarModel[]
+  Order      Order[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("products")
+}
+
+model Order {
+  uid String @id @default(uuid())
+
+  user User @relation(fields: [userUid], references: [uid])
+
+  carModel CarModel @relation(fields: [carModelUid], references: [uid])
+
+  product Product @relation(fields: [productUid], references: [uid])
+
+  quantity Decimal
+
+  totalValue  Decimal @map("total_value")
+  userUid     String
+  carModelUid String
+  productUid  String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("orders")
+}
