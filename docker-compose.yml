@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  pg-db-dev:
+    image: postgres:14
+    container_name: rapidoms-db-dev
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: rapidoms2024
+      POSTGRES_USER: rapidoms
+      POSTGRES_DB: rapidoms
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+    volumes:
+      - rapidoms_postgres:/var/lib/postgresql/data
+    networks:
+      - rapidoms
+
+  redis:
+    image: redis
+    container_name: rapidoms-redis
+    command: redis-server --requirepass rapidoms2024
+    ports:
+      - 6379:6379
+    networks:
+      - rapidoms
+
+networks:
+  rapidoms:
+    driver: bridge
+
+volumes:
+  rapidoms_postgres:
