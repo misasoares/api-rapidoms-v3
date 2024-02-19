@@ -27,7 +27,7 @@ export class CarBrandController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.carBrandService.findOne(+id);
+    return this.carBrandService.findOne(id);
   }
 
   @Patch(':id')

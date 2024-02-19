@@ -25,12 +25,16 @@ export class CarBrandService {
     return carBrand;
   }
 
-  findAll() {
-    return `This action returns all carBrand`;
+  async findAll() {
+    return await this.prisma.carBrand.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} carBrand`;
+  async findOne(id: string) {
+    return await this.prisma.carBrand.findUnique({
+      where: {
+        uid: id,
+      },
+    });
   }
 
   update(id: number, updateCarBrandDto: UpdateCarBrandDto) {
