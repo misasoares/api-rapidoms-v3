@@ -40,9 +40,11 @@ model CarBrand {
 model CarModel {
   uid String @id @default(uuid())
 
-  name String
+  name String @unique
 
   description String
+
+  yearFabrication Int
 
   carBrand    CarBrand @relation(fields: [carBrandUid], references: [uid])
   carBrandUid String
