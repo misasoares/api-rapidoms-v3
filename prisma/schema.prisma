@@ -93,3 +93,25 @@ model Order {
 
   @@map("orders")
 }
+
+
+model CheckRegister{
+  uid String @id @default(uuid())
+
+  accName String
+  bank String
+  accNumber String
+  agencyNumber String
+  payerName String
+  checkNumber String
+  payerPhone String
+  sendTo String?
+  dueDate String
+  value String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("check_register")
+
+}

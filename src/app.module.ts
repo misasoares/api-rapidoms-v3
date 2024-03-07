@@ -8,6 +8,7 @@ import { CarModelModule } from './car-model/car-model.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ClassValidatorPipe } from './shared/pipes/validation.pipe';
 import { UserModule } from './user/user.module';
+import { CheckRegisterModule } from './check-register/check-register.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot({ isGlobal: true }),
     CarBrandModule,
     CarModelModule,
+    CheckRegisterModule,
   ],
   controllers: [AppController],
   providers: [
