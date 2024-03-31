@@ -94,24 +94,54 @@ model Order {
   @@map("orders")
 }
 
-
-model CheckRegister{
+model CheckRegister {
   uid String @id @default(uuid())
 
-  accName String
-  bank String
-  accNumber String
-  agencyNumber String
-  payerName String
-  checkNumber String
-  payerPhone String
-  sendTo String?
-  dueDate String
-  value String
+  payerName   String
+  checkNumber String   @unique()
+  payerPhone  String?
+  sendTo      String?
+  dueDate     DateTime
+  value       String
+  accBankUid  String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  @@map("check_register")
+  Bank        Banks        @relation(fields: [banksUid], references: [uid])
+  AccountBank AccountBank? @relation(fields: [accBankUid], references: [uid])
+  banksUid    String
 
+  @@map("check_register")
+}
+
+model Banks {
+  uid String @id @default(uuid())
+
+  name           String @unique()
+  accNumber      String @unique()
+  agencyNumber   String
+  accountBankUid String
+
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @default(now()) @updatedAt @map("updated_at")
+  CheckRegister CheckRegister[]
+  AccountBank   AccountBank     @relation(fields: [accountBankUid], references: [uid])
+
+  @@map("banks")
+}
+
+model AccountBank {
+  uid String @id @default(uuid())
+
+  name String @unique()
+
+  Banks Banks[]
+
+  Checks CheckRegister[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("account_bank")
 }

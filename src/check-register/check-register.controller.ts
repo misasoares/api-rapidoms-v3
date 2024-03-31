@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CheckRegisterService } from './check-register.service';
 import { CreateCheckRegisterDto } from './dto/create-check-register.dto';
-import { UpdateCheckRegisterDto } from './dto/update-check-register.dto';
 
 @Controller('checks')
 export class CheckRegisterController {
@@ -21,13 +12,13 @@ export class CheckRegisterController {
   }
 
   @Get()
-  findAll() {
-    return this.checkRegisterService.findAll();
+  findAllChecks() {
+    return this.checkRegisterService.findAllChecks();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.checkRegisterService.findOne(+id);
+  @Get(':accName')
+  findOneAccount(@Param('accName') accName: string) {
+    return this.checkRegisterService.findOneAccount(accName);
   }
 
   // @Patch(':id')

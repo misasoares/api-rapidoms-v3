@@ -9,6 +9,8 @@ export class CreateCheckRegisterDto {
   @IsNotEmpty()
   bank: string;
 
+  bankUid?: string | undefined;
+
   @IsString()
   @IsNotEmpty()
   agencyNumber: string;
@@ -22,8 +24,7 @@ export class CreateCheckRegisterDto {
   checkNumber: string;
 
   @IsString()
-  @IsNotEmpty()
-  payerPhone: string;
+  payerPhone?: string;
 
   @IsString()
   sendTo?: string;
