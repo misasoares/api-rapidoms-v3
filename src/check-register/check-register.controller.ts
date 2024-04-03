@@ -21,6 +21,12 @@ export class CheckRegisterController {
     return this.checkRegisterService.findOneAccount(accName);
   }
 
+  @Get('payers/:payerName')
+  findPayers(@Param('payerName') payer: string) {
+    console.log(payer);
+    return this.checkRegisterService.findPayers(payer);
+  }
+
   // @Patch(':id')
   // update(
   //   @Param('id') id: string,

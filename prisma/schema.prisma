@@ -120,6 +120,7 @@ model Banks {
 
   name           String @unique()
   accNumber      String @unique()
+  cpfOrCnpj      String
   agencyNumber   String
   accountBankUid String
 
@@ -144,4 +145,14 @@ model AccountBank {
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("account_bank")
+}
+
+model CheckPayers {
+  uid String @id @default(uuid())
+
+  name String @unique()
+
+  phone String?
+
+  @@map("check_payers")
 }

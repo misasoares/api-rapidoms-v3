@@ -17,6 +17,10 @@ export class CreateCheckRegisterDto {
 
   @IsString()
   @IsNotEmpty()
+  cpfOrCnpj: string;
+
+  @IsString()
+  @IsNotEmpty()
   payerName: string;
 
   @IsString()
@@ -40,4 +44,10 @@ export class CreateCheckRegisterDto {
   @IsString()
   @IsNotEmpty()
   accNumber: string;
+}
+
+export class FindPayer {
+  uid?: string;
+  name?: string;
+  phone?: string;
 }

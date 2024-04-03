@@ -9,13 +9,13 @@ export class CheckRegisterService {
     let createAccountBank;
     let createBank;
 
-    const findSome = await this.prisma.accountBank.findUnique({
+    const findSomeAccBank = await this.prisma.accountBank.findUnique({
       where: {
         name: createCheckRegisterDto.accName,
       },
     });
 
-    if (!findSome) {
+    if (!findSomeAccBank) {
       createAccountBank = await this.prisma.accountBank.create({
         data: {
           name: createCheckRegisterDto.accName,
@@ -25,6 +25,7 @@ export class CheckRegisterService {
                 name: createCheckRegisterDto.bank,
               },
               create: {
+                cpfOrCnpj: createCheckRegisterDto.cpfOrCnpj,
                 name: createCheckRegisterDto.bank,
                 accNumber: createCheckRegisterDto.accNumber,
                 agencyNumber: createCheckRegisterDto.agencyNumber,
@@ -48,17 +49,37 @@ export class CheckRegisterService {
     if (!findBank) {
       createBank = await this.prisma.banks.create({
         data: {
+          cpfOrCnpj: createCheckRegisterDto.cpfOrCnpj,
           name: createCheckRegisterDto.bank,
           accNumber: createCheckRegisterDto.accNumber,
           agencyNumber: createCheckRegisterDto.agencyNumber,
-          accountBankUid: findSome ? findSome.uid : createAccountBank.uid,
+          accountBankUid: findSomeAccBank
+            ? findSomeAccBank.uid
+            : createAccountBank.uid,
+        },
+      });
+    }
+
+    const findPayer = await this.prisma.checkPayers.findUnique({
+      where: {
+        name: createCheckRegisterDto.payerName,
+      },
+    });
+
+    if (!findPayer) {
+      await this.prisma.checkPayers.create({
+        data: {
+          name: createCheckRegisterDto.payerName,
+          phone: createCheckRegisterDto.payerPhone,
         },
       });
     }
 
     const createCheck = await this.prisma.checkRegister.create({
       data: {
-        accBankUid: findSome ? findSome.uid : createAccountBank.uid,
+        accBankUid: findSomeAccBank
+          ? findSomeAccBank.uid
+          : createAccountBank.uid,
         banksUid: findBank ? findBank.uid : createBank.uid,
         checkNumber: createCheckRegisterDto.checkNumber,
         dueDate: createCheckRegisterDto.dueDate,
@@ -102,7 +123,7 @@ export class CheckRegisterService {
   }
 
   async findOneAccount(accName: string) {
-    const findOne = await this.prisma.accountBank.findMany({
+    const findMany = await this.prisma.accountBank.findMany({
       where: {
         name: {
           contains: accName,
@@ -114,7 +135,24 @@ export class CheckRegisterService {
       },
     });
 
-    return findOne;
+    return findMany;
+  }
+
+  async findPayers(payer: string) {
+    const findMany = await this.prisma.checkPayers.findMany({
+      where: {
+        name: {
+          contains: payer,
+        },
+      },
+      select: {
+        uid: true,
+        name: true,
+        phone: true,
+      },
+    });
+
+    return findMany;
   }
 
   //   update(id: number, updateCheckRegisterDto: UpdateCheckRegisterDto) {
