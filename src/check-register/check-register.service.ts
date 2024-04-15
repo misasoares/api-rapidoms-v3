@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCheckRegisterDto } from './dto/create-check-register.dto';
+import { UpdateCheckRegisterDto } from './dto/update-check-register.dto';
 
 @Injectable()
 export class CheckRegisterService {
@@ -155,9 +156,47 @@ export class CheckRegisterService {
     return findMany;
   }
 
-  //   update(id: number, updateCheckRegisterDto: UpdateCheckRegisterDto) {
-  //     return `This action updates a #${id} checkRegister`;
-  //   }
+  async update(uid: string, updateCheckRegisterDto: UpdateCheckRegisterDto) {
+    const existingCheck = await this.prisma.checkRegister.findUnique({
+      where: { uid },
+      select: {
+        AccountBank: true,
+      },
+    });
+
+    if (!existingCheck) {
+      throw new BadRequestException(`Não foi posível encontrar esse cheque.`);
+    }
+
+    // if (existingCheck.AccountBank.name === updateCheckRegisterDto.accName) {
+    //   console.log('não alterou o nome da conta do banco');
+    // }
+    // if (existingCheck.AccountBank.name !== updateCheckRegisterDto.accName) {
+    //   console.log('Alterou o nome da conta do banco - SIM');
+    // }
+
+    const updateCheck = await this.prisma.checkRegister.update({
+      where: {
+        uid,
+      },
+      data: {
+        sendTo: updateCheckRegisterDto.sendTo,
+      },
+      select: {
+        uid: true,
+        AccountBank: true,
+        Bank: true,
+        checkNumber: true,
+        dueDate: true,
+        payerName: true,
+        payerPhone: true,
+        value: true,
+        sendTo: true,
+      },
+    });
+
+    return updateCheck;
+  }
 
   //   remove(id: number) {
   //     return `This action removes a #${id} checkRegister`;

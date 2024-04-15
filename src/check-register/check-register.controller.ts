@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CheckRegisterService } from './check-register.service';
 import { CreateCheckRegisterDto } from './dto/create-check-register.dto';
+import { UpdateCheckRegisterDto } from './dto/update-check-register.dto';
 
 @Controller('checks')
 export class CheckRegisterController {
@@ -23,17 +24,16 @@ export class CheckRegisterController {
 
   @Get('payers/:payerName')
   findPayers(@Param('payerName') payer: string) {
-    console.log(payer);
     return this.checkRegisterService.findPayers(payer);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateCheckRegisterDto: UpdateCheckRegisterDto,
-  // ) {
-  //   return this.checkRegisterService.update(+id, updateCheckRegisterDto);
-  // }
+  @Put(':uid')
+  update(
+    @Param('uid') uid: string,
+    @Body() updateCheckRegisterDto: UpdateCheckRegisterDto,
+  ) {
+    return this.checkRegisterService.update(uid, updateCheckRegisterDto);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {
