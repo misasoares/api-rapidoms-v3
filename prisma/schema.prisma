@@ -94,6 +94,33 @@ model Order {
   @@map("orders")
 }
 
+model InternalOrder {
+  uid String @id @default(uuid())
+
+  type                  String
+  costumer              String
+  phone                 String?
+  address               String?
+  vehicles              String?
+  productsInternalOrder ProductsInternalOrder[]
+  totalValue            Decimal
+
+  @@map("internal_order")
+}
+
+model ProductsInternalOrder {
+  uid String @id @default(uuid())
+
+  quantity         Decimal
+  description      String
+  unityValue       Decimal
+  total            Decimal
+  internalOrderUid String?
+  InternalOrder    InternalOrder? @relation(fields: [internalOrderUid], references: [uid])
+
+  @@map("products_internal_order")
+}
+
 model CheckRegister {
   uid String @id @default(uuid())
 

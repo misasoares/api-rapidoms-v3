@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ClassValidatorPipe } from './shared/pipes/validation.pipe';
 import { UserModule } from './user/user.module';
 import { CheckRegisterModule } from './check-register/check-register.module';
+import { InternalOrderModule } from './internal-order/internal-order.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CheckRegisterModule } from './check-register/check-register.module';
     CarBrandModule,
     CarModelModule,
     CheckRegisterModule,
+    InternalOrderModule,
   ],
   controllers: [AppController],
   providers: [
