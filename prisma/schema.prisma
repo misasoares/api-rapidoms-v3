@@ -94,16 +94,34 @@ model Order {
   @@map("orders")
 }
 
+model Costumer {
+  uid String @id @default(uuid())
+
+  name      String
+  cpfOrCnpj String?
+  address   String?
+  phone     String  @unique
+
+  internalOrder InternalOrder[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
 model InternalOrder {
   uid String @id @default(uuid())
 
   type                  String
-  costumer              String
-  phone                 String?
-  address               String?
+  costumerUid           String
   vehicles              String?
   productsInternalOrder ProductsInternalOrder[]
   totalValue            Decimal
+  observations          String?
+
+  costumer Costumer @relation(fields: [costumerUid], references: [uid])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("internal_order")
 }
