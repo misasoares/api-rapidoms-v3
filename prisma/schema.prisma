@@ -111,7 +111,7 @@ model Costumer {
 model InternalOrder {
   uid String @id @default(uuid())
 
-  type                  String
+  type                  EInternalOrderType
   costumerUid           String
   vehicles              String?
   productsInternalOrder ProductsInternalOrder[]
@@ -124,6 +124,12 @@ model InternalOrder {
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("internal_order")
+}
+
+enum EInternalOrderType {
+  BUDGET
+  ORDER
+  RECEIPT
 }
 
 model ProductsInternalOrder {
