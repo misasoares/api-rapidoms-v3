@@ -72,6 +72,7 @@ export class InternalOrderService {
         costumer: true,
         productsInternalOrder: true,
       },
+      orderBy: [{ createdAt: 'desc' }],
     });
 
     const formatted = findAll.map((item) => ({
