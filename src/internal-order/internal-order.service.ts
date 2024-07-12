@@ -55,12 +55,13 @@ export class InternalOrderService {
 
     const productsCreatetoInternalOrder = await Promise.all(
       products.map(async (product) => {
+        const total = Number(product.quantity) * Number(product.unityValue);
         return await this.prisma.productsInternalOrder.create({
           data: {
             quantity: Number(product.quantity),
             description: product.description,
             unityValue: Number(product.unityValue),
-            total: Number(product.total),
+            total: Number(total),
             internalOrderUid: internalOrder.uid,
           },
         });
@@ -78,6 +79,9 @@ export class InternalOrderService {
       },
       orderBy: [{ createdAt: 'desc' }],
     });
+
+    const test = await this.prisma.productsInternalOrder.findMany();
+    console.log(test);
 
     const formatted = findAll.map((item) => ({
       ...item,
