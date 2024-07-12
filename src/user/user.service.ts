@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -7,34 +8,25 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UserService {
   constructor(private prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto) {
-    const findUserByEmail = await this.prisma.user.findUnique({
-      where: {
-        email: createUserDto.email,
-      },
-    });
+    const findUserByEmail = await this.findByEmail(createUserDto.email);
 
     if (findUserByEmail) {
       throw new BadRequestException('Usuário com esse email já existe.');
     }
 
-    const findUserByDocument = await this.prisma.user.findUnique({
-      where: {
-        document: createUserDto.document,
-      },
-    });
-
-    if (findUserByDocument) {
-      throw new BadRequestException('Usuário com esse documento já existe.');
-    }
     const user = await this.prisma.user.create({
       data: {
-        name: createUserDto.name,
+        name: createUserDto.displayName,
         email: createUserDto.email,
-        document: createUserDto.document,
+        password: await bcrypt.hash(createUserDto.password, 10),
         admin: false,
       },
     });
-    return user;
+    return { ...user, password: undefined };
+  }
+
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
   }
 
   findAll() {

@@ -14,8 +14,8 @@ model User {
   uid      String   @id @default(uuid())
   name     String
   email    String   @unique
+  password String
   admin    Boolean? @default(false)
-  document String?  @unique
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
@@ -117,6 +117,8 @@ model InternalOrder {
   productsInternalOrder ProductsInternalOrder[]
   totalValue            Decimal
   observations          String?
+  status                EInternalOrderStatus
+  orderNumber           String
 
   costumer Costumer @relation(fields: [costumerUid], references: [uid])
 
@@ -130,6 +132,11 @@ enum EInternalOrderType {
   BUDGET
   ORDER
   RECEIPT
+}
+
+enum EInternalOrderStatus {
+  IN_PROGRESS
+  CONCLUDED
 }
 
 model ProductsInternalOrder {

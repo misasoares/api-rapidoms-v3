@@ -16,6 +16,8 @@ export class InternalOrderService {
       products,
       totalValue,
       observations,
+      status,
+      orderNumber,
     } = createInternalOrder;
 
     const costumer = await this.prisma.costumer.upsert({
@@ -41,8 +43,10 @@ export class InternalOrderService {
         type,
         costumerUid: costumer.uid,
         vehicles,
+        orderNumber,
         totalValue,
         observations,
+        status,
       },
       include: {
         costumer: true,

@@ -1,16 +1,13 @@
-import { Transform } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { RemoveSpecialCharacters } from 'src/shared/utils/remove-special-characters.decorator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
-  @IsNotEmpty({ message: 'Nome obrigatório.' })
-  name: string;
+  @IsNotEmpty({ message: 'Nome é obrigatório.' })
+  displayName: string;
 
-  @IsEmail({}, { message: 'E-mail obrigatório.' })
-  @IsNotEmpty({ message: 'E-mail obrigatório.' })
+  @IsEmail({}, { message: 'E-mail é obrigatório.' })
+  @IsNotEmpty({ message: 'E-mail é obrigatório.' })
   email: string;
 
-  @IsString()
-  @Transform(RemoveSpecialCharacters)
-  document?: string;
+  @IsNotEmpty({ message: 'Senha é obrigatório.' })
+  password: string;
 }
