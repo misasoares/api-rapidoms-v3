@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CarBrandModule } from './car-brand/car-brand.module';
 import { CarModelModule } from './car-model/car-model.module';
@@ -13,6 +12,7 @@ import { InternalOrderModule } from './internal-order/internal-order.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { CustomResponseInterceptor } from './shared/custom-response.interceptor';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [

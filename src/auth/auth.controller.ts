@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -10,6 +11,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthRequest } from './models/AuthRequest';
 import { IsPublic } from './decorators/is-public.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
 
 @Controller()
 export class AuthController {
@@ -21,5 +23,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Request() req: AuthRequest) {
     return this.authService.login(req.user);
+  }
+
+  // @IsPublic()
+  // @UseGuards(LocalAuthGuard)
+  @Get('access-token')
+  token(@CurrentUser() user: any) {
+    return this.authService.accessToken(user.uid);
   }
 }

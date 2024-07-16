@@ -19,14 +19,47 @@ export class UserService {
         name: createUserDto.displayName,
         email: createUserDto.email,
         password: await bcrypt.hash(createUserDto.password, 10),
-        admin: false,
       },
     });
+
+    const findEmployeeRole = await this.prisma.role.findFirst({
+      where: {
+        name: 'employees',
+      },
+    });
+
+    await this.prisma.user.update({
+      where: {
+        uid: user.uid,
+      },
+      data: {
+        roles: {
+          connect: {
+            uid: findEmployeeRole.uid,
+          },
+        },
+      },
+    });
+
     return { ...user, password: undefined };
   }
 
   async findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findUnique({
+      where: { email },
+      include: { roles: true },
+    });
+  }
+
+  async findByUid(userUid: string) {
+    return await this.prisma.user.findUnique({
+      where: {
+        uid: userUid,
+      },
+      include: {
+        roles: true,
+      },
+    });
   }
 
   findAll() {

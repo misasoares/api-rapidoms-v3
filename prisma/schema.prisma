@@ -11,17 +11,30 @@ datasource db {
 }
 
 model User {
-  uid      String   @id @default(uuid())
+  uid      String @id @default(uuid())
   name     String
-  email    String   @unique
+  email    String @unique
   password String
-  admin    Boolean? @default(false)
+
+  roles Role[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
   Order     Order[]
 
   @@map("users")
+}
+
+model Role {
+  uid  String @id @default(uuid())
+  name String @unique
+
+  users User[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("role")
 }
 
 model CarBrand {
