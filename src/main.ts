@@ -19,7 +19,9 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  app.enableCors({
+    origin: 'https://web-5j5cm1d5q-misasoares-projects.vercel.app/',
+  });
 
   await app.listen(8080);
 }
