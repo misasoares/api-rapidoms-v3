@@ -21,6 +21,8 @@ async function bootstrap() {
 
   app.enableCors({
     origin: 'https://web-5j5cm1d5q-misasoares-projects.vercel.app/',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   await app.listen(8080);
