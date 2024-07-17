@@ -52,7 +52,7 @@ export class AuthService {
       uid: userData.uid,
       displayName: userData.name,
       email: userData.email,
-      role: userData.role,
+      role: userData.roles,
     };
 
     return { user, access_token: token };
