@@ -52,7 +52,7 @@ export class AuthService {
       uid: userData.uid,
       displayName: userData.name,
       email: userData.email,
-      role: userData.roles,
+      role: userData.roles.map((role) => role.name),
     };
 
     return { user, access_token: token };
