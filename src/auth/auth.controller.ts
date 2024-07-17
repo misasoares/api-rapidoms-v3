@@ -25,10 +25,9 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
-  // @IsPublic()
-  // @UseGuards(LocalAuthGuard)
   @Get('access-token')
-  token(@CurrentUser() user: any) {
+  @HttpCode(HttpStatus.OK)
+  async token(@CurrentUser() user: any) {
     return this.authService.accessToken(user.uid);
   }
 }
