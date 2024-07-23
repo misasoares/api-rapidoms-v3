@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateCustomerDto } from './dto/create-customer.dto';
 
 @Injectable()
 export class CustomerService {
   constructor(private prisma: PrismaService) {}
-  create(createCustomerDto: CreateCustomerDto) {
-    return 'This action adds a new customer';
+  async create(createCustomerDto: any) {
+    const customer = await this.prisma.costumer.create({
+      data: createCustomerDto,
+    });
+
+    return customer;
   }
 
   findAll() {
@@ -17,6 +20,9 @@ export class CustomerService {
             productsInternalOrder: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
   }
