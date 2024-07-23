@@ -74,7 +74,7 @@ model CarModel {
 model Product {
   uid String @id @default(uuid())
 
-  name String
+  name String @unique
 
   carsModels CarModel[]
   Order      Order[]
