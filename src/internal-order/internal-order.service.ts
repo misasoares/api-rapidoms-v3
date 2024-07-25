@@ -61,6 +61,7 @@ export class InternalOrderService {
             quantity: Number(product.quantity),
             description: product.description,
             unityValue: Number(product.unityValue),
+            discount: Number(product.discount),
             total: Number(total),
             internalOrderUid: internalOrder.uid,
           },

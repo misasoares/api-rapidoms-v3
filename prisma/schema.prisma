@@ -159,6 +159,7 @@ model ProductsInternalOrder {
   description      String
   unityValue       Decimal
   total            Decimal
+  discount         Decimal?
   internalOrderUid String?
   InternalOrder    InternalOrder? @relation(fields: [internalOrderUid], references: [uid])
 
