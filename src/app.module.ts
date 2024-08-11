@@ -13,7 +13,9 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { CustomResponseInterceptor } from './shared/custom-response.interceptor';
 import { AppController } from './app.controller';
-import { CustomerModule } from './customer/customer.module';
+
+import { OrderModule } from './order/order.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -25,7 +27,8 @@ import { CustomerModule } from './customer/customer.module';
     CarModelModule,
     CheckRegisterModule,
     InternalOrderModule,
-    CustomerModule,
+    OrderModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [

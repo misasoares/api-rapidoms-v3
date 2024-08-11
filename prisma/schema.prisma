@@ -11,16 +11,21 @@ datasource db {
 }
 
 model User {
-  uid      String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
+  uid String @id @default(uuid())
 
-  roles Role[]
+  name      String
+  email     String? @unique
+  password  String?
+  cpfOrCnpj String?
+  address   String?
+  phone     String  @unique
+
+  internalOrder InternalOrder[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
   Order     Order[]
+  roles     Role[]
 
   @@map("users")
 }
@@ -74,7 +79,12 @@ model CarModel {
 model Product {
   uid String @id @default(uuid())
 
-  name String @unique
+  name     String  @unique
+  value    Decimal
+  amper    String
+  quantity Int
+  cca      Int
+  warranty Int
 
   carsModels CarModel[]
   Order      Order[]
@@ -107,20 +117,6 @@ model Order {
   @@map("orders")
 }
 
-model Costumer {
-  uid String @id @default(uuid())
-
-  name      String
-  cpfOrCnpj String?
-  address   String?
-  phone     String  @unique
-
-  internalOrder InternalOrder[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-}
-
 model InternalOrder {
   uid String @id @default(uuid())
 
@@ -133,10 +129,10 @@ model InternalOrder {
   status                EInternalOrderStatus
   orderNumber           String
 
-  costumer Costumer @relation(fields: [costumerUid], references: [uid])
-
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  User      User?    @relation(fields: [userUid], references: [uid])
+  userUid   String?
 
   @@map("internal_order")
 }

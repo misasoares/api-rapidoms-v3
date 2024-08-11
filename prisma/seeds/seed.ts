@@ -1,7 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-const rolesBase = [{ name: 'admin' }, { name: 'employees' }];
+const rolesBase = [
+  { name: 'admin' },
+  { name: 'employees' },
+  { name: 'customer' },
+];
 
 const userAdmin = {
   name: 'Admin',
@@ -33,6 +37,7 @@ async function execute(prisma: PrismaClient) {
     create: {
       ...userAdmin,
       password: await bcrypt.hash(userAdmin.password, 10),
+      phone: '999999999',
     },
     update: {},
   });

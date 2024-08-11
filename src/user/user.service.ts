@@ -7,35 +7,44 @@ import { CreateUserDto } from './dto/create-user.dto';
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
-  async create(createUserDto: CreateUserDto) {
-    const findUserByEmail = await this.findByEmail(createUserDto.email);
 
-    if (findUserByEmail) {
-      throw new BadRequestException('Usuário com esse email já existe.');
+  async create(createUserDto: CreateUserDto) {
+    if (createUserDto.email) {
+      const findUserByEmail = await this.findByEmail(createUserDto.email);
+
+      if (findUserByEmail) {
+        throw new BadRequestException('Já existe um usuário com esse email.');
+      }
     }
+
+    const findUserByPhone = await this.findByPhone(createUserDto.phone);
+
+    if (findUserByPhone)
+      throw new BadRequestException('Já existe um usuário com esse telefone.');
+
+    const findRole = await this.prisma.role.findUnique({
+      where: {
+        name: createUserDto.role,
+      },
+    });
+
+    if (!findRole)
+      throw new BadRequestException('Não foi possível encontrar uma role.');
+
+    const password = createUserDto.password
+      ? await bcrypt.hash(createUserDto.password, 10)
+      : null;
 
     const user = await this.prisma.user.create({
       data: {
         name: createUserDto.displayName,
         email: createUserDto.email,
-        password: await bcrypt.hash(createUserDto.password, 10),
-      },
-    });
-
-    const findEmployeeRole = await this.prisma.role.findFirst({
-      where: {
-        name: 'employees',
-      },
-    });
-
-    await this.prisma.user.update({
-      where: {
-        uid: user.uid,
-      },
-      data: {
+        password,
+        phone: createUserDto.phone,
+        address: createUserDto.address,
         roles: {
           connect: {
-            uid: findEmployeeRole.uid,
+            uid: findRole.uid,
           },
         },
       },
@@ -48,6 +57,14 @@ export class UserService {
     return this.prisma.user.findUnique({
       where: { email },
       include: { roles: true },
+    });
+  }
+
+  async findByPhone(phone: string) {
+    return await this.prisma.user.findUnique({
+      where: {
+        phone,
+      },
     });
   }
 
